@@ -1,0 +1,59 @@
+*{
+    margin: 0 ;
+    padding: 0;
+    outline: none;
+
+}
+header{
+    justify-content: center;
+
+    text-align: center;
+
+
+}
+.content {
+    display: flex;
+    justify-content: space-between;
+    min-height: 500px;
+}
+.left-column{
+    width: 700px;
+
+
+
+}
+.right-column {
+    width: 700px;
+
+}
+.middle-column {
+    width: 700px;
+
+}
+
+.block-content{
+    padding: 20px 0;
+    width: 100%;
+
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.card{
+    padding: 10px;
+
+    width: 150px;
+    margin: 10px 10px;
+
+}
+.title{
+
+    padding: 10px;
+
+}
+
+.form{
+
+
+}
