@@ -71,29 +71,30 @@
                 <div v-for="(note, i) in notesListDo " :key="i">
                     <div class="card">
                         <span>№{{ i+1 }}</span>
-                        <span>{{ note }}</span>
+                        <span>{{ notesListDo }}</span>
                         <div class="card-content">
                             <div>
-                                <input type="checkbox"  checked>
+                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
                                 <span>Создание</span>
                             </div>
                             <div>
-                                <input type="checkbox"  checked>
+                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
                                 <span>Подготовка</span>
                             </div>
                             <div>
-                                <input type="checkbox"  checked>
+                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
                                 <span>В процессе</span>
                             </div>
                             <div>
-                                <input type="checkbox" >
+                                <input type="checkbox" v-on:click="scoreRadioDo" >
                                 <span>Внедрение</span>
                             </div>
                             <div>
-                                <input type="checkbox" >
+                                <input type="checkbox" v-on:click="scoreRadioDo" >
                                 <span>Завершено</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </ul>
@@ -106,7 +107,7 @@
             <div v-for="(note, i) in notesListDone " :key="i">
                 <div class="card">
                     <span>№{{ i+1 }}</span>
-                    <span>{{ note }}</span>
+                    <span>{{ notesListDone }}</span>
                     <div class="card-content">
                         <div>
                             <input type="checkbox"  checked>
@@ -129,6 +130,7 @@
                             <span>Завершено</span>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

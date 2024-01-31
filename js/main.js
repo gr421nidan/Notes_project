@@ -10,7 +10,7 @@ let app = new Vue({
     methods: {
         addNote(){
             if(this.notesList.length>=3){
-                alert('Вы больше не можете добавить!')
+                alert('Достигнуто максимальное количество карточек в столбце!')
             }
             else{
                 this.notesList.push(this.note);
@@ -28,13 +28,24 @@ let app = new Vue({
                 if (this.score >=3 && this.score < 5){
                     for(let element in this.notesList) {
                         this.notesList.splice(this.notesList[element], 1)
+
                     }
                     this.notesListDo.push(this.note)
                     this.score = 0
                 }
             }
-
-
         },
+        scoreRadioDo(){
+            this.score += 1
+            console.log(this.score)
+            if (this.score >= 2){
+                for(let element in this.notesListDo) {
+                    this.notesListDo.splice(this.notesListDo[element], 1)
+                }
+                this.score = 0
+                this.notesListDone.push(this.note)
+            }
+        }
+
 
     }})
