@@ -71,7 +71,7 @@
                 <div v-for="(note, i) in notesListDo " :key="i">
                     <div class="card">
                         <span>№{{ i+1 }}</span>
-                        <span>{{ notesListDo }}</span>
+                        <span>{{ note }}</span>
                         <div class="card-content">
                             <div>
                                 <input type="checkbox" v-on:click="scoreRadioDo" checked>
@@ -107,7 +107,7 @@
             <div v-for="(note, i) in notesListDone " :key="i">
                 <div class="card">
                     <span>№{{ i+1 }}</span>
-                    <span>{{ notesListDone }}</span>
+                    <span>{{ note }}</span>
                     <div class="card-content">
                         <div>
                             <input type="checkbox"  checked>

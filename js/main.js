@@ -11,6 +11,7 @@ let app = new Vue({
         addNote(){
             if(this.notesList.length>=3){
                 alert('Достигнуто максимальное количество карточек в столбце!')
+                return
             }
             else{
                 this.notesList.push(this.note);
