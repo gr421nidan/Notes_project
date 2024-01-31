@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script defer src="js/vue.js"></script>
+    <script defer src="js/main.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <title>Product App</title>
+</head>
+<body>
+<div id="app">
+    <header>
+        <h1>Notes</h1>
+    </header>
+    <div class="block-content">
+        <div class="container">
+            <div class="form">
+                <label>
+                    <h3>Создайте свою заметку</h3>
+                    <input type="text" v-model="note" placeholder="Введите название" required/>
+                </label>
+                <button class='button' v-on:click="addNote" >Создать</button>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="left-column">
+            <h2>
+                <span class="title">Создано</span>
+            </h2>
+            <ul >
+                <div v-for="(note, i) in notesList " :key="i">
+                    <div class="card">
+                        <span>№{{ i+1 }}</span>
+                        <span>{{ note }}</span>
+                        <div class="card-content">
+                            <div>
+                                <input type="checkbox" >
+                                <span>Создание</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" >
+                                <span>Подготовка</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" >
+                                <span>В процессе</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" >
+                                <span>Внедрение</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" >
+                                <span>Завершено</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+
+        <div class="middle-column">
+            <h2>
+                <span class="title">В процессе</span>
+            </h2>
+        </div>
+
+        <div class="right-column">
+            <h2>
+                <span class="title">Завершено</span>
+            </h2>
+        </div>
+    </div>
+</div>
+</body>
