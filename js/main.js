@@ -1,184 +1,147 @@
 Vue.component('column', {
     template: `
-    <div>
-            <div class="block-content">
-                <div class="container">
-                    <div class="form">
-                        <label>
-                            <h3>Создайте свою заметку</h3>
-                            <input  type="text" v-model="note" placeholder="Введите название" required/>
-                        </label>
-                        <button class='button' v-on:click="addNote" >Создать</button>
-                    </div>
-                </div>
-            </div>
-    <div class="content">
-        <div class="left-column">
-            <h2>
-                <span class="title">Создано</span>
-            </h2>
-            <ul >
-                <div v-for="(note, i) in notesList " :key="i">
-                    <div class="card">
-                        <span>№{{ i+1 }}</span>
-                        <span>{{ note }}</span>
-                        <div class="card-content">
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadio" >
-                                <span>Создание</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadio" >
-                                <span>Подготовка</span>
-                            </div>
-                            <div>
-                                <input type="checkbox"  v-on:click="scoreRadio">
-                                <span>В процессе</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadio" disabled="disabled">
-                                <span>Внедрение</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadio" disabled="disabled" >
-                                <span>Завершено</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </div>
+<div>
+    <form @submit.prevent="addCard">
+        <label for="card-title">Заголовок:</label>
+        <input id="card-title" type="text" v-model="newCardTitle">
 
-        <div class="middle-column">
-            <h2>
-                <span class="title">В процессе</span>
-            </h2>
+        <label for="card-items">Пункты списка (каждый пункт с новой строки):</label>
+        <textarea id="card-items" v-model="newItemText"></textarea>
+
+        <button type="submit">Добавить карточку</button>
+    </form>
+    <div class="column">
+        <h2>Первый столбец</h2>
+        <div v-for="card in column1" :key="card.id" class="card">
+            <h3>{{ card.title }}</h3>
             <ul>
-                <div v-for="(note, i) in notesListDo " :key="i">
-                    <div class="card">
-                        <span>№{{ i+1 }}</span>
-                        <span>{{ note }}</span>
-                        <div class="card-content">
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
-                                <span>Создание</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
-                                <span>Подготовка</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadioDo" checked>
-                                <span>В процессе</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadioDo" >
-                                <span>Внедрение</span>
-                            </div>
-                            <div>
-                                <input type="checkbox" v-on:click="scoreRadioDo" >
-                                <span>Завершено</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                <li v-for="item in card.items" :key="item.id">
+                    <input type="checkbox" v-model="item.completed" @change="handleCardPosition(card)">
+                    <span :class="{ completed: item.completed }">{{ item.text }}</span>
+                </li>
             </ul>
         </div>
-
-        <div class="right-column">
-            <h2>
-                <span class="title">Завершено</span>
-            </h2>
-            <div v-for="(note, i) in notesListDone " :key="i">
-                <div class="card">
-                    <span>№{{ i+1 }}</span>
-                    <span>{{ note }}</span>
-                    <div class="card-content">
-                        <div>
-                            <input type="checkbox"  checked>
-                            <span>Создание</span>
-                        </div>
-                        <div>
-                            <input type="checkbox"  checked>
-                            <span>Подготовка</span>
-                        </div>
-                        <div>
-                            <input type="checkbox"  checked>
-                            <span>В процессе</span>
-                        </div>
-                        <div>
-                            <input type="checkbox"  checked>
-                            <span>Внедрение</span>
-                        </div>
-                        <div>
-                            <input type="checkbox"  checked>
-                            <span>Завершено</span>
-                        </div>
-                    </div>
-                    <p>Дата завершения: {{ notesListDo.completionDate }}</p>
-                </div>
+    </div>
+    <div class="column">
+        <h2>Второй столбец</h2>
+        <div v-for="card in column2" :key="card.id" class="card">
+            <h3>{{ card.title }}</h3>
+            <ul>
+                <li v-for="item in card.items" :key="item.id">
+                    <input type="checkbox" v-model="item.completed" @change="handleCardPosition(card)">
+                    <span :class="{ completed: item.completed }">{{ item.text }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="column">
+        <h2>Третий столбец</h2>
+        <div v-for="card in column3" :key="card.id" class="card">
+            <h3>{{ card.title }}</h3>
+            <ul>
+                <li v-for="item in card.items" :key="item.id">
+                    <input type="checkbox" v-model="item.completed">
+                    <span :class="{ completed: item.completed }">{{ item.text}}</span>
+                </li>
+            </ul>
+            <div v-if="card.completedDate">
+                Последнее выполнение: {{ card.completedDate }}
             </div>
         </div>
+
     </div>
 </div>`,
 
-    data(){
-        return{
-            note: "",
-            notesList: [],
-            notesListDo: [],
-            notesListDone:[],
-            score: 0
+    data() {
+        return {
+            column1: [],
+            column2: [],
+            column3: [],
+            newCardTitle: '',
+            newItemText: '', // добавляемое пользователем значение текста элемента// добавляемое пользователем значение заголовка
         }
+    },
+    mounted(){
+        if (localStorage.getItem('column1')) {
+            try {
+                this.column1 = JSON.parse(localStorage.getItem('column1'));
+            } catch(e) {
+                localStorage.removeItem('column1');
+            }
+        }
+        if (localStorage.getItem('column2')) {
+            try {
+                this.column2 = JSON.parse(localStorage.getItem('column2'));
+            } catch(e) {
+                localStorage.removeItem('column2');
+            }
+        }
+        if (localStorage.getItem('column3')) {
+            try {
+                this.column3 = JSON.parse(localStorage.getItem('column3'));
+            } catch(e) {
+                localStorage.removeItem('column3');
+            }
+        }
+
     },
 
     methods: {
-        addNote(){
-            if(this.notesList.length>=3){
-                alert('Достигнуто максимальное количество карточек в столбце!')
-                return
+        handleCardPosition(card) {
+            const totalItems = card.items.length;
+            const completedItems = card.items.filter(item => item.completed).length;
+
+            if (completedItems / totalItems > 0.5 && this.column1.includes(card)) {
+                this.column1.splice(this.column1.indexOf(card), 1);
+                this.column2.push(card);
+
+                this.saveLocalStorage();
+            } else if (completedItems / totalItems === 1 && this.column2.includes(card)) {
+                this.column2.splice(this.column2.indexOf(card), 1);
+                this.column3.push(card);
+                card.completedDate = new Date().toLocaleString(); // добавляем дату и время завершения
+                this.saveLocalStorage();
             }
-            else{
-                this.notesList.push(this.note);
+        },
+        addCard() {
+            if (this.newCardTitle !== '' && this.column1.length < 3) {
+                const newCard = {
+                    id: Date.now(),
+                    title: this.newCardTitle,
+                    items: this.newItemText.split('\n').filter(item => item.trim() !== '').map(item => ({ text: item, completed: false }))
+                };
+                if (this.newCardTitle !== '' && newCard.items.length >= 3 && newCard.items.length <= 5) {
+                    this.column1.push(newCard);
+                }
+                else alert("Введите правильные значения!!!")
+                {
+
+                }
+                this.handleCardPosition(newCard);
+                this.newCardTitle = '';
+                this.newItemText = '';
+                this.saveLocalStorage();
+
             }
+
+
 
 
         },
-        scoreRadio() {
-            if(this.notesListDo.length>=5){
-                alert('Нельзя добавить')
-                return
-            }
-            else{
-                this.score += 1
-                console.log(this.score)
-                if (this.score >=3 && this.score < 5){
-                    for(let element in this.notesList) {
-                        this.notesList.splice(this.notesList[element], 1)
-
-                    }
-                    this.notesListDo.push(this.note)
-                    this.score = 0
-                }
-            }
-            l
+        saveLocalStorage() {
+            const parsed = JSON.stringify(this.column1);
+            const parsed1 = JSON.stringify(this.column2);
+            const parsed2 = JSON.stringify(this.column3);
+            localStorage.setItem('column1', parsed);
+            localStorage.setItem('column2', parsed1);
+            localStorage.setItem('column3', parsed2);
         },
-        scoreRadioDo(){
-            this.score += 1
-            console.log(this.score)
-            if (this.score >= 2){
-                for(let element in this.notesListDo) {
-                    this.notesListDo.splice(this.notesListDo[element], 1)
 
-                }
-                this.score = 0
-                this.notesListDone.push(this.note)
-                this.notesListDo.completionDate = new Date().toLocaleString();
-            }
 
-        }
-    },
+
+
+
+    }
 
 });
 
