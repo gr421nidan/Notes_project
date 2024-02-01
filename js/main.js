@@ -116,7 +116,7 @@ Vue.component('column', {
                             <span>Завершено</span>
                         </div>
                     </div>
-
+                    <p>Дата завершения: {{ notesListDo.completionDate }}</p>
                 </div>
             </div>
         </div>
@@ -143,6 +143,7 @@ Vue.component('column', {
                 this.notesList.push(this.note);
             }
 
+
         },
         scoreRadio() {
             if(this.notesListDo.length>=5){
@@ -161,6 +162,7 @@ Vue.component('column', {
                     this.score = 0
                 }
             }
+            l
         },
         scoreRadioDo(){
             this.score += 1
@@ -168,12 +170,16 @@ Vue.component('column', {
             if (this.score >= 2){
                 for(let element in this.notesListDo) {
                     this.notesListDo.splice(this.notesListDo[element], 1)
+
                 }
                 this.score = 0
                 this.notesListDone.push(this.note)
+                this.notesListDo.completionDate = new Date().toLocaleString();
             }
+
         }
-    }
+    },
+
 });
 
 
