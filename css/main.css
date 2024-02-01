@@ -1,16 +1,85 @@
+*{
+    margin: 0 ;
+    padding: 0;
+    outline: none;
+
+}
+body{
+    background: #a7bb95;
+}
+header{
+    justify-content: center;
+
+    text-align: center;
+    color: #656565;
+    background: #a7bb95;
+
+}
+.content {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f1e1;
+
+}
+
 .column {
     width: 33.33%;
     float: left;
     padding: 10px;
     box-sizing: border-box;
-    background: aqua;
+
+    min-height: 780px;
+
+
+
 }
 .card {
-    background: gold;
-    border: 10px solid #ccc;
+    background-color: #f8f1e1;
+    border: none;
     padding: 10px;
     margin-bottom: 10px;
+    border-radius: 10px;
 }
-.completed {
-    background-color: aqua;
+/*.completed {*/
+/*    background-color: #d7ffb6;*/
+/*}*/
+form{
+    padding: 20px 0;
+    width: 300px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: #656565;
+}
+.title_column{
+    color: #656565;
+    padding: 10px;
+
+
+}
+li{
+    list-style: none;
+}
+
+button{
+    color: #656565;
+    background-color: white;
+    font-size: 15px;
+    border: none;
+    border-radius: 10px;
+
+}
+
+input {
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+}
+textarea{
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
 }

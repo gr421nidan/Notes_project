@@ -1,18 +1,20 @@
 Vue.component('column', {
     template: `
 <div>
+    <div class="content">
     <form @submit.prevent="addCard">
-        <label for="card-title">Заголовок:</label>
-        <input id="card-title" type="text" v-model="newCardTitle">
+        <label for="card-title">Создайте свою заметку:</label>
+        <input id="card-title" type="text" v-model="cardName"><br>
 
-        <label for="card-items">Пункты списка (каждый пункт с новой строки):</label>
-        <textarea id="card-items" v-model="newItemText"></textarea>
+        <label for="card-items">Создайте пункты заметки:</label><br>
+        <textarea id="card-items" v-model="checkText"></textarea><br>
 
-        <button type="submit">Добавить карточку</button>
+        <button type="submit">Создать</button>
     </form>
+    </div>
     <div class="column">
-        <h2>Первый столбец</h2>
-        <div v-for="card in column1" :key="card.id" class="card">
+        <h2 class="title_column">Новые</h2>
+        <div v-for="card in notesList" :key="card.id" class="card">
             <h3>{{ card.title }}</h3>
             <ul>
                 <li v-for="item in card.items" :key="item.id">
@@ -23,8 +25,8 @@ Vue.component('column', {
         </div>
     </div>
     <div class="column">
-        <h2>Второй столбец</h2>
-        <div v-for="card in column2" :key="card.id" class="card">
+        <h2 class="title_column">В процессе</h2>
+        <div v-for="card in notesListProgress" :key="card.id" class="card">
             <h3>{{ card.title }}</h3>
             <ul>
                 <li v-for="item in card.items" :key="item.id">
@@ -35,8 +37,8 @@ Vue.component('column', {
         </div>
     </div>
     <div class="column">
-        <h2>Третий столбец</h2>
-        <div v-for="card in column3" :key="card.id" class="card">
+        <h2 class="title_column">Завершённые</h2>
+        <div v-for="card in notesListCompleted" :key="card.id" class="card">
             <h3>{{ card.title }}</h3>
             <ul>
                 <li v-for="item in card.items" :key="item.id">
@@ -54,33 +56,33 @@ Vue.component('column', {
 
     data() {
         return {
-            column1: [],
-            column2: [],
-            column3: [],
-            newCardTitle: '',
-            newItemText: '', // добавляемое пользователем значение текста элемента// добавляемое пользователем значение заголовка
+            notesList: [],
+            notesListProgress: [],
+            notesListCompleted: [],
+            cardName: '',
+            checkText: '',
         }
     },
     mounted(){
-        if (localStorage.getItem('column1')) {
+        if (localStorage.getItem('notesList')) {
             try {
-                this.column1 = JSON.parse(localStorage.getItem('column1'));
+                this.notesList = JSON.parse(localStorage.getItem('notesList'));
             } catch(e) {
-                localStorage.removeItem('column1');
+                localStorage.removeItem('notesList');
             }
         }
-        if (localStorage.getItem('column2')) {
+        if (localStorage.getItem('notesListProgress')) {
             try {
-                this.column2 = JSON.parse(localStorage.getItem('column2'));
+                this.notesListProgress = JSON.parse(localStorage.getItem('notesListProgress'));
             } catch(e) {
-                localStorage.removeItem('column2');
+                localStorage.removeItem('notesListProgress');
             }
         }
-        if (localStorage.getItem('column3')) {
+        if (localStorage.getItem('notesListCompleted')) {
             try {
-                this.column3 = JSON.parse(localStorage.getItem('column3'));
+                this.notesListCompleted = JSON.parse(localStorage.getItem('notesListCompleted'));
             } catch(e) {
-                localStorage.removeItem('column3');
+                localStorage.removeItem('notesListCompleted');
             }
         }
 
@@ -91,35 +93,40 @@ Vue.component('column', {
             const totalItems = card.items.length;
             const completedItems = card.items.filter(item => item.completed).length;
 
-            if (completedItems / totalItems > 0.5 && this.column1.includes(card)) {
-                this.column1.splice(this.column1.indexOf(card), 1);
-                this.column2.push(card);
 
-                this.saveLocalStorage();
-            } else if (completedItems / totalItems === 1 && this.column2.includes(card)) {
-                this.column2.splice(this.column2.indexOf(card), 1);
-                this.column3.push(card);
+                if (completedItems / totalItems > 0.5 && this.notesList.includes(card)) {
+
+                    if(this.notesListProgress.length>=5){alert('Выполните задачи 2 столбца!')}
+                    else {this.notesList.splice(this.notesList.indexOf(card), 1);
+                        this.notesListProgress.push(card);}
+                        this.saveLocalStorage();
+                }
+
+
+            else if (completedItems / totalItems === 1 && this.notesListProgress.includes(card)) {
+                this.notesListProgress.splice(this.notesListProgress.indexOf(card), 1);
+                this.notesListCompleted.push(card);
                 card.completedDate = new Date().toLocaleString(); // добавляем дату и время завершения
                 this.saveLocalStorage();
             }
         },
         addCard() {
-            if (this.newCardTitle !== '' && this.column1.length < 3) {
+            if (this.cardName !== '' && this.notesList.length < 3) {
                 const newCard = {
                     id: Date.now(),
-                    title: this.newCardTitle,
-                    items: this.newItemText.split('\n').filter(item => item.trim() !== '').map(item => ({ text: item, completed: false }))
+                    title: this.cardName,
+                    items: this.checkText.split('\n').filter(item => item.trim() !== '').map(item => ({ text: item, completed: false }))
                 };
-                if (this.newCardTitle !== '' && newCard.items.length >= 3 && newCard.items.length <= 5) {
-                    this.column1.push(newCard);
+                if (this.cardName !== '' && newCard.items.length >= 3 && newCard.items.length <= 5) {
+                    this.notesList.push(newCard);
                 }
                 else alert("Введите правильные значения!!!")
                 {
 
                 }
                 this.handleCardPosition(newCard);
-                this.newCardTitle = '';
-                this.newItemText = '';
+                this.cardName = '';
+                this.checkText = '';
                 this.saveLocalStorage();
 
             }
@@ -129,12 +136,12 @@ Vue.component('column', {
 
         },
         saveLocalStorage() {
-            const parsed = JSON.stringify(this.column1);
-            const parsed1 = JSON.stringify(this.column2);
-            const parsed2 = JSON.stringify(this.column3);
-            localStorage.setItem('column1', parsed);
-            localStorage.setItem('column2', parsed1);
-            localStorage.setItem('column3', parsed2);
+            const parsed = JSON.stringify(this.notesList);
+            const parsed1 = JSON.stringify(this.notesListProgress);
+            const parsed2 = JSON.stringify(this.notesListCompleted);
+            localStorage.setItem('notesList', parsed);
+            localStorage.setItem('notesListProgress', parsed1);
+            localStorage.setItem('notesListCompleted', parsed2);
         },
 
 
